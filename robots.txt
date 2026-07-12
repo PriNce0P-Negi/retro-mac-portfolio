@@ -1,0 +1,11 @@
+# robots.txt — PN OS Portfolio
+# https://princenegi.dev/robots.txt
+
+User-agent: *
+Allow: /
+
+# Block access to any potential future admin or config paths
+Disallow: /vercel.json
+
+# Sitemap location
+Sitemap: https://princenegi.dev/sitemap.xml

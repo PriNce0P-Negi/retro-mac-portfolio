@@ -1,0 +1,46 @@
+# PN OS Portfolio — .gitignore
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Editor directories
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependency directories (if you ever add npm)
+node_modules/
+.npm
+
+# Environment files (never commit these)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel local
+.vercel/
+
+# Build output (if any future build step is added)
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.bak
