@@ -1,209 +1,28 @@
-# Prince Negi — Portfolio OS
+Retro OS Portfolio
 
-> An interactive personal portfolio designed as a retro macOS-style desktop operating system.
+This is my personal portfolio website, built to look and function like a retro operating system. I wanted to build something interactive instead of a standard scrolling website. 
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/PriNce0P-Negi/portfolio)
+Everything here is built from scratch using plain HTML, CSS, and vanilla JavaScript. There are no frameworks or heavy libraries involved. 
 
----
+Features
 
-## 🖥️ Live Demo
+A working window manager where you can drag, minimize, maximize, and close windows.
+A terminal application that actually works. You can type commands to navigate the site, check my skills, or run some hidden easter eggs.
+A spotlight search feature. Press Ctrl+K to bring up a search bar that filters through the different windows and sections of the site.
+A recruiter view. For people who just want to read my resume quickly without clicking through windows, there is a toggle in the menu bar that instantly switches the entire site into a clean, single-page printable format.
+Built-in games like Snake and Minesweeper for fun.
+An audio system built with the Web Audio API to handle boot chimes and click sounds without relying on external mp3 files.
 
-**[princenegi.dev](https://princenegi.dev)**
+How to run it locally
 
----
+Since this is just static HTML, CSS, and JavaScript, you do not need any complex build steps to run it. 
 
-## ✨ What is this?
+1. Clone this repository to your local machine.
+2. Open the folder in your terminal and start a local web server. For example, if you have Python installed, you can run: python -m http.server 8000
+3. Open your browser and navigate to http://localhost:8000
 
-Instead of a traditional scrolling portfolio, this is a fully interactive **desktop operating system** built in vanilla HTML, CSS, and JavaScript.
+Note on running it locally: If you just double-click the index.html file instead of using a local server, the YouTube video embeds in the project cards might fail to load due to browser security restrictions on the file protocol. Running a simple local server fixes this.
 
-Visitors can:
-- Open and drag windows around the desktop
-- Resize, minimize, and maximize each section
-- Play a retro **Snake** game
-- Play **Minesweeper**
-- Explore my About, Projects, Skills, Likes, Goals, and Achievements in individual windows
-- Open the Social Links folder like a real Finder window
-- Experience a full **boot sequence** on first load
+Why I built this
 
----
-
-## 📁 Project Structure
-
-```
-portfolio/
-├── index.html          # Main HTML — all windows and structure
-├── style.css           # All styles — theme, windows, dock, animations
-├── app.js              # Window manager, boot sequence, clock, drag & resize
-├── snake.js            # Snake game (canvas-based)
-├── minesweeper.js      # Minesweeper game with flood-fill, timer, flagging
-├── sw.js               # Service worker (PWA, offline support)
-├── manifest.json       # PWA manifest
-├── vercel.json         # Vercel deployment config + security headers
-├── robots.txt          # Search engine directives
-├── sitemap.xml         # XML sitemap for Google Search Console
-├── favicon.svg         # SVG favicon (PN logo)
-├── 404.html            # Custom 404 page (OS-themed error dialog)
-├── Resume.pdf          # ← ADD YOUR RESUME HERE (placeholder for now)
-├── icons/              # ← ADD PWA icons here (see icon requirements below)
-│   ├── favicon-16x16.png
-│   ├── favicon-32x32.png
-│   ├── apple-touch-icon.png    (180x180)
-│   ├── icon-72x72.png
-│   ├── icon-96x96.png
-│   ├── icon-128x128.png
-│   ├── icon-192x192.png
-│   ├── icon-512x512.png
-│   └── og-image.png            (1200x630 — social share preview)
-└── .gitignore
-```
-
----
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-1. **Push this repository to GitHub.**
-2. Go to [vercel.com](https://vercel.com) → **Add New Project** → Import your GitHub repo.
-3. No build configuration needed. Vercel auto-detects this as a static site.
-4. Click **Deploy**.
-
-Every push to `main` automatically triggers a new deployment.
-
-### Custom Domain
-
-1. In Vercel dashboard → **Settings → Domains**.
-2. Add `princenegi.dev`.
-3. Update your domain DNS records as instructed by Vercel.
-4. Done. HTTPS is automatic.
-
----
-
-## 📊 Analytics Setup
-
-### Google Analytics 4
-
-1. Go to [analytics.google.com](https://analytics.google.com) → Create a new GA4 property.
-2. Get your **Measurement ID** (format: `G-XXXXXXXXXX`).
-3. Open `index.html`.
-4. Find the comment block marked `GOOGLE ANALYTICS 4`.
-5. Uncomment the script block and replace `G-XXXXXXXXXX` with your Measurement ID.
-
-### Microsoft Clarity
-
-1. Go to [clarity.microsoft.com](https://clarity.microsoft.com) → Create a new project.
-2. Get your **Project ID**.
-3. Open `index.html`.
-4. Find the comment block marked `MICROSOFT CLARITY`.
-5. Uncomment the script block and replace `XXXXXXXXXX` with your Project ID.
-
----
-
-## 🔍 Google Search Console
-
-1. Deploy the site first.
-2. Go to [search.google.com/search-console](https://search.google.com/search-console).
-3. Add property → **URL prefix** → enter `https://princenegi.dev`.
-4. Verify ownership (HTML tag method is easiest — paste the meta tag into `index.html` inside the `<head>`).
-5. Submit `https://princenegi.dev/sitemap.xml` under **Sitemaps**.
-
----
-
-## 🖼️ Adding Icons (PWA + Favicon)
-
-The `icons/` folder is required for PWA support and proper favicons.
-
-**Quick setup using [realfavicongenerator.net](https://realfavicongenerator.net):**
-1. Upload a square image of the **PN** logo (or any image you want as your icon).
-2. Download the generated pack.
-3. Place the PNG files in the `icons/` folder.
-4. Also add `og-image.png` (1200×630px) — this is the image shown when sharing on LinkedIn, Twitter, WhatsApp, etc.
-
----
-
-## 📄 Adding Your Resume
-
-1. Export your resume as a PDF named exactly: `Resume.pdf`
-2. Place it in the root of this project (same folder as `index.html`).
-3. The "Resume.pdf" icon in the Social Links window will automatically serve the file.
-   *(The resume notice modal will no longer appear once the file exists.)*
-
----
-
-## 🛠 Customization
-
-### Updating Your Info
-
-All personal content is in `index.html`:
-
-| Section | Window ID | What to edit |
-|---|---|---|
-| About | `#win-about` | Name, bio, contact details |
-| Achievements | `#win-achievements` | Achievement cards |
-| Projects | `#win-projects` | Project cards and links |
-| Skills | `#win-skills` | Skill bars and percentages |
-| Likes | `#win-likes` | Personal interests |
-| Goals | `#win-goals` | Life goals |
-| Social Links | `#win-social` | Social URLs and email |
-
-### Version & Last Updated
-
-In `index.html`, search for:
-```html
-<span class="about-meta-pill">Portfolio OS v1.0.0</span>
-<span class="about-meta-pill">Last updated: July 2026</span>
-```
-Update these as you release new versions.
-
-### Canonical URL & OG Image
-
-In `index.html` `<head>`, update:
-```html
-<link rel="canonical" href="https://princenegi.dev" />
-<meta property="og:url" content="https://princenegi.dev" />
-<meta property="og:image" content="https://princenegi.dev/icons/og-image.png" />
-```
-
----
-
-## ⚡ Performance
-
-This portfolio is optimized to target:
-
-| Metric | Target |
-|---|---|
-| Lighthouse Performance | 95+ |
-| Lighthouse Accessibility | 95+ |
-| Lighthouse Best Practices | 100 |
-| Lighthouse SEO | 100 |
-
-All animations respect `prefers-reduced-motion` for accessibility.
-
----
-
-## 🧰 Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Structure | HTML5 |
-| Styling | Vanilla CSS3 (no frameworks) |
-| Logic | Vanilla JavaScript (ES6+) |
-| Games | HTML5 Canvas API |
-| Fonts | Google Fonts (Inter, Roboto Mono, VT323) |
-| PWA | Service Worker + Web App Manifest |
-| Hosting | Vercel |
-| Analytics | Google Analytics 4 + Microsoft Clarity |
-
----
-
-## 📬 Contact
-
-- **Email:** princenegi11179@gmail.com
-- **GitHub:** [github.com/PriNce0P-Negi](https://github.com/PriNce0P-Negi)
-- **LinkedIn:** [linkedin.com/in/prince-negi-94289a314](https://www.linkedin.com/in/prince-negi-94289a314/)
-- **X:** [@_PRINCE_NEGI](https://x.com/_PRINCE_NEGI)
-- **LeetCode:** [leetcode.com/u/Prince_Negi_](https://leetcode.com/u/Prince_Negi_/)
-
----
-
-*Built with vanilla HTML, CSS, and JavaScript. No frameworks. No bundlers. Just code.*
+I learn best by doing. Building an OS interface from scratch in the browser was a good way to test my understanding of DOM manipulation, event listeners, state management, and CSS positioning. It was a lot of trial and error, but it was a fun challenge.
