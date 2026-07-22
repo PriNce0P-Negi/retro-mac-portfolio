@@ -117,6 +117,8 @@
     <span class="menu-item" id="menuHelp">Help</span>
   </div>
   <div class="menubar-right">
+    <button class="recruiter-btn" id="recruiterModeBtn" onclick="toggleRecruiterMode()" title="Switch to single-page resume view">⚡ Recruiter View</button>
+    <button class="sound-btn" id="soundToggleBtn" onclick="AudioSystem.toggle()" title="Toggle sound">🔊</button>
     <span class="menu-icon wifi-icon" title="WiFi">
       <svg width="14" height="11" viewBox="0 0 14 11" fill="none">
         <path d="M7 9.5a1 1 0 100 2 1 1 0 000-2z" fill="currentColor"/>
@@ -132,6 +134,72 @@
       </svg>
     </span>
     <span id="menuClock"></span>
+  </div>
+</div>
+
+<!-- ═══ SPOTLIGHT SEARCH MODAL ═══ -->
+<div id="spotlight-modal" class="spotlight-backdrop" style="display:none;" onclick="closeSpotlight(event)">
+  <div class="spotlight-box">
+    <div class="spotlight-input-wrap">
+      <span class="spotlight-icon">🔍</span>
+      <input type="text" id="spotlight-input" class="spotlight-input" placeholder="Search windows, skills, projects..." autocomplete="off" />
+      <span class="spotlight-esc" onclick="closeSpotlight()">Esc</span>
+    </div>
+    <div class="spotlight-results" id="spotlight-results"></div>
+  </div>
+</div>
+
+<!-- ═══ RECRUITER VIEW PAGE ═══ -->
+<div id="recruiter-view" style="display:none;">
+  <div class="rv-header">
+    <button class="rv-back-btn" onclick="toggleRecruiterMode()">← Back to OS</button>
+    <div class="rv-name">Prince Negi</div>
+    <div class="rv-tagline">CS Student · AI &amp; ML · Software Developer</div>
+    <div class="rv-contact">
+      <a href="mailto:princenegi11179@gmail.com">📧 princenegi11179@gmail.com</a>
+      <a href="https://github.com/PriNce0P-Negi" target="_blank">⌥ GitHub</a>
+      <a href="https://www.linkedin.com/in/prince-negi-94289a314/" target="_blank">🔗 LinkedIn</a>
+      <a href="https://leetcode.com/u/Prince_Negi_/" target="_blank">⚡ LeetCode</a>
+      <a href="Resume.pdf" download="Prince_Negi_Resume.pdf">📄 Download Resume</a>
+    </div>
+  </div>
+  <div class="rv-body">
+    <div class="rv-section">
+      <div class="rv-section-title">About</div>
+      <p>Final year Computer Science Engineering student focused on AI, ML, and system design. I build by doing — if I read about something and don't try to build it, it doesn't really stick. Open to opportunities in AI/ML and software development.</p>
+    </div>
+    <div class="rv-section">
+      <div class="rv-section-title">Projects</div>
+      <div class="rv-project">
+        <div class="rv-proj-name">IndustrialBrain AI <span class="rv-badge">ET AI Hackathon 2026</span></div>
+        <div class="rv-proj-tags">Python · FastAPI · Next.js · LangGraph · Gemini · Neo4j · Qdrant</div>
+        <p>AI-powered platform that transforms industrial documents (manuals, SOPs, incident reports) into a searchable knowledge brain. Five specialized agents handle document intelligence, knowledge graph construction, RAG-based expert Q&amp;A, compliance checking, and auto-generated RCA reports.</p>
+        <a href="https://github.com/PriNce0P-Negi/IndustrialBrain_AI" target="_blank" class="rv-link">GitHub →</a>
+        <a href="https://youtu.be/0GWznxBQPqw" target="_blank" class="rv-link">🎥 Demo →</a>
+      </div>
+      <div class="rv-project">
+        <div class="rv-proj-name">Student Notes AI Assistant</div>
+        <div class="rv-proj-tags">Python · FastAPI · React · LangChain · Docker · Qdrant</div>
+        <p>AI assistant that lets students chat directly with their study material. Upload a PDF or image, ask anything — RAG-powered answers come from the actual notes. OCR support for handwritten notes, Qdrant vector DB, Docker deployment.</p>
+        <a href="https://github.com/PriNce0P-Negi/student-notes-ai-assistant" target="_blank" class="rv-link">GitHub →</a>
+        <a href="https://youtu.be/xH5ji8KePs0" target="_blank" class="rv-link">🎥 Demo →</a>
+      </div>
+    </div>
+    <div class="rv-section">
+      <div class="rv-section-title">Skills</div>
+      <div class="rv-skills-grid">
+        <div class="rv-skill-group"><div class="rv-skill-cat">Languages</div><div>Python · C · C++ · JavaScript · SQL</div></div>
+        <div class="rv-skill-group"><div class="rv-skill-cat">AI / ML</div><div>LangChain · LangGraph · RAG · NLP · Gemini API</div></div>
+        <div class="rv-skill-group"><div class="rv-skill-cat">Backend</div><div>FastAPI · Node.js · REST APIs · SQLAlchemy</div></div>
+        <div class="rv-skill-group"><div class="rv-skill-cat">Frontend</div><div>React · Next.js · HTML · CSS · TypeScript</div></div>
+        <div class="rv-skill-group"><div class="rv-skill-cat">Databases</div><div>PostgreSQL · MongoDB · Qdrant · Neo4j</div></div>
+        <div class="rv-skill-group"><div class="rv-skill-cat">Tools</div><div>Docker · Git · Linux · GitHub Actions</div></div>
+      </div>
+    </div>
+    <div class="rv-section">
+      <div class="rv-section-title">Education</div>
+      <p><strong>B.Tech Computer Science Engineering</strong> · 2021–2025 · India 🇮🇳</p>
+    </div>
   </div>
 </div>
 
@@ -208,6 +276,13 @@
       <span>Minesweeper</span>
     </div>
 
+    <div class="dicon" data-window="win-terminal" onclick="openWindow('win-terminal')" tabindex="0" title="Terminal">
+      <div class="dicon-img">
+        <svg width="44" height="44" viewBox="0 0 44 44"><rect x="4" y="4" width="36" height="36" rx="4" fill="#0d0e17" stroke="#9ece6a" stroke-width="1.2"/><text x="8" y="22" fill="#9ece6a" font-size="9" font-family="monospace">$</text><rect x="13" y="18" width="10" height="2" rx="1" fill="#9ece6a" opacity="0.8"/><rect x="8" y="26" width="18" height="2" rx="1" fill="#9ece6a" opacity="0.5"/><rect x="8" y="30" width="12" height="2" rx="1" fill="#9ece6a" opacity="0.3"/></svg>
+      </div>
+      <span>Terminal</span>
+    </div>
+
   </div><!-- end .desktop-icons -->
 
   <!-- ═══ WINDOW: ABOUT ═══ -->
@@ -246,7 +321,7 @@
 
 
   <!-- ═══ WINDOW: PROJECTS ═══ -->
-  <div class="window" id="win-projects" style="left:100px;top:420px;width:660px;display:none;">
+  <div class="window" id="win-projects" style="left:100px;top:60px;width:660px;height:540px;display:none;">
     <div class="titlebar" onmousedown="startDrag(event,'win-projects')">
       <div class="traffic-lights">
         <span class="tl close" onclick="closeWindow('win-projects')"></span>
@@ -257,11 +332,40 @@
     </div>
     <div class="win-body">
       <div class="terminal-bar"><span class="term-dot">●</span> Prince Negi — Projects</div>
-      <div class="content-area">
+      <div class="content-area projects-scroll-area">
 
-        <!-- Featured Project -->
+        <!-- Project 1: IndustrialBrain AI -->
         <div class="project-card featured">
           <div class="featured-badge">★ Latest Project</div>
+          <div class="proj-header">
+            <span class="proj-icon">🏭</span>
+            <div class="proj-tags">
+              <span class="tag tag-blue">Python</span>
+              <span class="tag tag-green">FastAPI</span>
+              <span class="tag tag-yellow">Next.js</span>
+              <span class="tag tag-pink">LangGraph</span>
+              <span class="tag tag-purple">Gemini</span>
+              <span class="tag tag-blue">Neo4j</span>
+            </div>
+          </div>
+          <div class="proj-name">IndustrialBrain AI</div>
+          <div class="proj-desc">An AI-powered platform built for the ET AI Hackathon 2026 that transforms scattered industrial documents — manuals, maintenance logs, incident reports, and SOPs — into a centralized knowledge brain. Engineers can semantically search across all documents, query a live knowledge graph of industrial assets, and get grounded AI answers through a multi-agent system. Five specialized agents handle document intelligence, compliance checking, knowledge graph building, expert Q&amp;A (via RAG), and auto-generated Root Cause Analysis reports.</div>
+          <div class="proj-feature-list">
+            <span class="proj-feature">✓ Multi-Agent Architecture</span>
+            <span class="proj-feature">✓ Knowledge Graph (Neo4j)</span>
+            <span class="proj-feature">✓ RAG + Gemini</span>
+            <span class="proj-feature">✓ Semantic Search</span>
+            <span class="proj-feature">✓ Compliance Agent</span>
+            <span class="proj-feature">✓ Auto RCA Reports</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/PriNce0P-Negi/IndustrialBrain_AI" target="_blank" class="proj-link primary">[ GitHub →]</a>
+            <button class="proj-link demo-btn" onclick="openVideoWindow('win-video-industrial','0GWznxBQPqw')">[🎥 Watch Demo]</button>
+          </div>
+        </div>
+
+        <!-- Project 2: Student Notes AI Assistant -->
+        <div class="project-card" style="margin-top:14px;">
           <div class="proj-header">
             <span class="proj-icon">🤖</span>
             <div class="proj-tags">
@@ -283,32 +387,25 @@
           </div>
           <div class="proj-links">
             <a href="https://github.com/PriNce0P-Negi/student-notes-ai-assistant" target="_blank" class="proj-link primary">[ GitHub →]</a>
+            <button class="proj-link demo-btn" onclick="openVideoWindow('win-video-notes','xH5ji8KePs0')">[🎥 Watch Demo]</button>
           </div>
         </div>
 
-        <div class="project-grid" style="margin-top:14px;">
-          <div class="project-card">
-            <div class="proj-header">
-              <span class="proj-icon">⚙️</span>
-              <div class="proj-tags"><span class="tag tag-blue">Python</span><span class="tag tag-green">Backend</span></div>
-            </div>
-            <div class="proj-name">More projects coming...</div>
-            <div class="proj-desc">I'm still building. I prefer to publish when something is actually ready rather than half-done. Check GitHub for what's in progress.</div>
-            <div class="proj-links"><a href="https://github.com/PriNce0P-Negi" target="_blank" class="proj-link">[ GitHub Profile ]</a></div>
+        <!-- More projects placeholder -->
+        <div class="project-card" style="margin-top:14px;opacity:0.55;">
+          <div class="proj-header">
+            <span class="proj-icon">🔭</span>
+            <div class="proj-tags"><span class="tag tag-yellow">Coming Soon</span></div>
           </div>
-          <div class="project-card">
-            <div class="proj-header">
-              <span class="proj-icon">🧠</span>
-              <div class="proj-tags"><span class="tag tag-yellow">AI</span><span class="tag tag-pink">RAG</span></div>
-            </div>
-            <div class="proj-name">Always Exploring</div>
-            <div class="proj-desc">Current focus areas: system design, distributed systems, and applied AI. Building in public whenever I can.</div>
-            <div class="proj-links"><a href="https://github.com/PriNce0P-Negi" target="_blank" class="proj-link">[ Watch on GitHub ]</a></div>
-          </div>
+          <div class="proj-name">More projects in the works...</div>
+          <div class="proj-desc">I prefer to ship when something is actually ready. Check GitHub to see what I'm building right now.</div>
+          <div class="proj-links"><a href="https://github.com/PriNce0P-Negi" target="_blank" class="proj-link">[ GitHub Profile ]</a></div>
         </div>
+
       </div>
     </div>
   </div>
+
 
   <!-- ═══ WINDOW: SKILLS ═══ -->
   <div class="window" id="win-skills" style="left:775px;top:370px;width:440px;display:none;">
@@ -591,7 +688,7 @@
             <span>Email</span>
           </a>
 
-          <div class="social-icon-item resume-item" onclick="showResumeNotice()">
+          <a class="social-icon-item" href="Resume.pdf" target="_blank" rel="noopener noreferrer" download="Prince_Negi_Resume.pdf">
             <div class="social-icon-wrap" style="background:rgba(187,154,247,0.1);border-color:rgba(187,154,247,0.25);">
               <svg width="32" height="36" viewBox="0 0 24 28" fill="none">
                 <rect x="2" y="1" width="16" height="22" rx="2" fill="#1e2030" stroke="#bb9af7" stroke-width="1.2"/>
@@ -601,8 +698,7 @@
               </svg>
             </div>
             <span>Resume.pdf</span>
-            <span class="resume-badge">Soon</span>
-          </div>
+          </a>
 
         </div>
       </div>
@@ -728,11 +824,64 @@
     </div>
   </div>
 
+  <!-- ═══ WINDOW: VIDEO — IndustrialBrain AI ═══ -->
+  <div class="window video-window" id="win-video-industrial" style="left:15%;top:8%;width:680px;display:none;">
+    <div class="titlebar" onmousedown="startDrag(event,'win-video-industrial')">
+      <div class="traffic-lights">
+        <span class="tl close" onclick="closeVideoWindow('win-video-industrial')"></span>
+        <span class="tl minimize" onclick="minimizeWindow('win-video-industrial')"></span>
+        <span class="tl maximize" onclick="toggleMaximize('win-video-industrial')"></span>
+      </div>
+      <span class="win-title">🎥 IndustrialBrain AI — Demo</span>
+    </div>
+    <div class="win-body video-body">
+      <iframe id="yt-industrial" width="100%" height="100%" src="" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- ═══ WINDOW: VIDEO — Student Notes AI ═══ -->
+  <div class="window video-window" id="win-video-notes" style="left:15%;top:8%;width:680px;display:none;">
+    <div class="titlebar" onmousedown="startDrag(event,'win-video-notes')">
+      <div class="traffic-lights">
+        <span class="tl close" onclick="closeVideoWindow('win-video-notes')"></span>
+        <span class="tl minimize" onclick="minimizeWindow('win-video-notes')"></span>
+        <span class="tl maximize" onclick="toggleMaximize('win-video-notes')"></span>
+      </div>
+      <span class="win-title">🎥 Student Notes AI — Demo</span>
+    </div>
+    <div class="win-body video-body">
+      <iframe id="yt-notes" width="100%" height="100%" src="" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- ═══ WINDOW: TERMINAL ═══ -->
+  <div class="window" id="win-terminal" style="left:180px;top:70px;width:620px;height:440px;display:none;">
+    <div class="titlebar" onmousedown="startDrag(event,'win-terminal')">
+      <div class="traffic-lights">
+        <span class="tl close" onclick="closeWindow('win-terminal')"></span>
+        <span class="tl minimize" onclick="minimizeWindow('win-terminal')"></span>
+        <span class="tl maximize" onclick="toggleMaximize('win-terminal')"></span>
+      </div>
+      <span class="win-title">Terminal — prince@pn-os</span>
+    </div>
+    <div class="win-body terminal-body">
+      <div class="term-output" id="term-output"></div>
+      <div class="term-input-row">
+        <span class="t-prompt">prince@pn-os:~$</span>
+        <input type="text" id="term-input" class="term-input" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" />
+      </div>
+    </div>
+  </div>
+
 </div><!-- end #desktop -->
+
+<!-- Confetti canvas (full-screen, above everything) -->
+<canvas id="confetti-canvas" style="display:none;position:fixed;inset:0;z-index:999999;pointer-events:none;"></canvas>
 
 <script src="app.js"></script>
 <script src="snake.js"></script>
 <script src="minesweeper.js"></script>
+<script src="terminal.js"></script>
 <script>
 function showResumeNotice() {
   document.getElementById('resumeModal').style.display = 'flex';

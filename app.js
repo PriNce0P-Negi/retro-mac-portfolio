@@ -19,7 +19,7 @@ const BOOT_MESSAGES = [
   'Launching...',
 ];
 
-const BOOT_DURATION_MS = 6800; // ~7 seconds
+const BOOT_DURATION_MS = 1800; // ~1.8 seconds
 
 function runBootSequence() {
   const fill     = document.getElementById('bootBarFill');
@@ -418,18 +418,250 @@ function setupMobileBackButtons() {
   });
 }
 
-// ══════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════
-
 window.addEventListener('load', () => {
   // Restore saved theme — called AFTER the dropdown has been built
-  // (the dropdown creation code above this runs at parse time, so by
-  //  window.load the #themeIcon and #themeLabel elements already exist)
   const saved = localStorage.getItem('pn-theme') || 'dark';
   applyTheme(saved);
   // Run boot
   runBootSequence();
   // Mobile back buttons
   setupMobileBackButtons();
+  // Init spotlight search
+  initSpotlight();
+  // Init audio system
+  AudioSystem.init();
+  // Restore recruiter mode if saved
+  if (localStorage.getItem('pn-recruiter') === '1') toggleRecruiterMode();
 });
+
+// ══════════════════════════════════════════
+//  AUDIO SYSTEM  (Web Audio API — no files)
+// ══════════════════════════════════════════
+
+const AudioSystem = (() => {
+  let ctx = null;
+  let muted = false;
+
+  function getCtx() {
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  function tone(freq, duration, type = 'sine', gain = 0.18, delay = 0) {
+    if (muted) return;
+    try {
+      const c = getCtx();
+      const osc = c.createOscillator();
+      const g   = c.createGain();
+      osc.connect(g); g.connect(c.destination);
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, c.currentTime + delay);
+      g.gain.setValueAtTime(0, c.currentTime + delay);
+      g.gain.linearRampToValueAtTime(gain, c.currentTime + delay + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + delay + duration);
+      osc.start(c.currentTime + delay);
+      osc.stop(c.currentTime + delay + duration + 0.05);
+    } catch(e) {}
+  }
+
+  return {
+    init() {
+      muted = localStorage.getItem('pn-sound') === '0';
+      const btn = document.getElementById('soundToggleBtn');
+      if (btn) btn.textContent = muted ? '🔇' : '🔊';
+    },
+    toggle() {
+      muted = !muted;
+      localStorage.setItem('pn-sound', muted ? '0' : '1');
+      const btn = document.getElementById('soundToggleBtn');
+      if (btn) btn.textContent = muted ? '🔇' : '🔊';
+    },
+    playBoot() {
+      // macOS-style startup chord: C-E-G arpeggio
+      tone(523.25, 1.2, 'sine', 0.22, 0.0);  // C5
+      tone(659.25, 1.0, 'sine', 0.18, 0.12); // E5
+      tone(783.99, 1.6, 'sine', 0.14, 0.24); // G5
+    },
+    playClick() { tone(880, 0.06, 'sine', 0.08); },
+    playOpen()  { tone(659, 0.12, 'sine', 0.12); tone(880, 0.10, 'sine', 0.09, 0.08); },
+    playClose() { tone(440, 0.08, 'sine', 0.10); tone(330, 0.10, 'sine', 0.08, 0.06); },
+  };
+})();
+
+// Inject sound into window open/close
+const _origOpen  = openWindow;
+const _origClose = closeWindow;
+window.openWindow = function(id) {
+  AudioSystem.playOpen();
+  _origOpen(id);
+};
+window.closeWindow = function(id) {
+  AudioSystem.playClose();
+  _origClose(id);
+};
+
+// Play boot chime after desktop reveals
+const _origReveal = revealDesktop;
+// revealDesktop is called at end of boot — patch boot sequence end
+const _origRunBoot = runBootSequence;
+// Instead: hook into init
+window.addEventListener('load', () => {
+  setTimeout(() => AudioSystem.playBoot(), 2000); // after ~2s boot
+}, { once: true });
+
+// ══════════════════════════════════════════
+//  VIDEO WINDOW SYSTEM
+// ══════════════════════════════════════════
+
+window.openVideoWindow = function(windowId, youtubeId) {
+  const win = document.getElementById(windowId);
+  if (!win) return;
+  const iframeId = windowId === 'win-video-industrial' ? 'yt-industrial' : 'yt-notes';
+  const iframe = document.getElementById(iframeId);
+  if (iframe) {
+    iframe.src = `https://www.youtube.com/embed/${youtubeId}?rel=0`;
+  }
+  win.classList.remove('win-closing', 'minimized');
+  win.style.display = 'flex';
+  focusWindow(windowId);
+};
+
+window.closeVideoWindow = function(windowId) {
+  const win = document.getElementById(windowId);
+  if (!win) return;
+  // Stop audio by clearing iframe src
+  const iframe = win.querySelector('iframe');
+  if (iframe) iframe.src = '';
+  AudioSystem.playClose();
+  win.classList.add('win-closing');
+  setTimeout(() => {
+    win.style.display = 'none';
+    win.classList.remove('win-closing');
+  }, 180);
+};
+
+// ══════════════════════════════════════════
+//  SPOTLIGHT SEARCH (Ctrl+K / Cmd+K)
+// ══════════════════════════════════════════
+
+const SPOTLIGHT_INDEX = [
+  { label: 'About — Prince Negi',  icon: '📄', keywords: ['about','prince','who','me'],       action: () => openWindow('win-about') },
+  { label: 'Projects',              icon: '🗂️', keywords: ['projects','ai','rag','build'],    action: () => openWindow('win-projects') },
+  { label: 'Skills',               icon: '⚙️', keywords: ['skills','python','react','tech'],  action: () => openWindow('win-skills') },
+  { label: 'Goals',                icon: '🎯', keywords: ['goals','dream','future','life'],   action: () => openWindow('win-goals') },
+  { label: 'Likes & Interests',    icon: '❤️', keywords: ['likes','hobbies','interests'],    action: () => openWindow('win-likes') },
+  { label: 'Social Links',         icon: '🔗', keywords: ['social','github','linkedin','contact'], action: () => openWindow('win-social') },
+  { label: 'Terminal',             icon: '💻', keywords: ['terminal','shell','cli','sudo'],   action: () => openWindow('win-terminal') },
+  { label: 'Snake Game',           icon: '🐍', keywords: ['snake','game','play'],             action: () => openWindow('win-snake') },
+  { label: 'Minesweeper',          icon: '💣', keywords: ['mine','minesweeper','bomb','game'],action: () => openWindow('win-minesweeper') },
+  { label: '⚡ Recruiter View',     icon: '⚡', keywords: ['recruiter','resume','cv','tldr','hire'], action: () => { closeSpotlight(); toggleRecruiterMode(); return; } },
+];
+
+function initSpotlight() {
+  const input = document.getElementById('spotlight-input');
+  if (!input) return;
+  input.addEventListener('input', () => renderSpotlightResults(input.value));
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSpotlight();
+    if (e.key === 'Enter') {
+      const first = document.querySelector('.spotlight-result-item');
+      if (first) first.click();
+    }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const items = document.querySelectorAll('.spotlight-result-item');
+      if (!items.length) return;
+      let idx = Array.from(items).findIndex(i => i.classList.contains('active'));
+      items[idx]?.classList.remove('active');
+      idx = e.key === 'ArrowDown' ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length;
+      items[idx].classList.add('active');
+      items[idx].scrollIntoView({ block: 'nearest' });
+    }
+  });
+}
+
+function renderSpotlightResults(query) {
+  const container = document.getElementById('spotlight-results');
+  if (!container) return;
+  const q = query.trim().toLowerCase();
+  const matches = q
+    ? SPOTLIGHT_INDEX.filter(item => item.keywords.some(k => k.includes(q)) || item.label.toLowerCase().includes(q))
+    : SPOTLIGHT_INDEX;
+  container.innerHTML = matches.map((item, i) =>
+    `<div class="spotlight-result-item${i === 0 ? ' active' : ''}" onclick="runSpotlightAction(${SPOTLIGHT_INDEX.indexOf(item)})">
+      <span class="sr-icon">${item.icon}</span>
+      <span class="sr-label">${item.label}</span>
+    </div>`
+  ).join('');
+}
+
+window.runSpotlightAction = function(idx) {
+  closeSpotlight();
+  setTimeout(() => SPOTLIGHT_INDEX[idx]?.action(), 80);
+};
+
+window.openSpotlight = function() {
+  const modal = document.getElementById('spotlight-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  modal.classList.add('open');
+  const input = document.getElementById('spotlight-input');
+  if (input) { input.value = ''; input.focus(); }
+  renderSpotlightResults('');
+};
+
+window.closeSpotlight = function(e) {
+  if (e && e.target !== document.getElementById('spotlight-modal')) return;
+  const modal = document.getElementById('spotlight-modal');
+  if (modal) { modal.style.display = 'none'; modal.classList.remove('open'); }
+};
+
+// Keyboard shortcut Ctrl+K / Cmd+K
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    const modal = document.getElementById('spotlight-modal');
+    if (modal && modal.classList.contains('open')) closeSpotlight();
+    else openSpotlight();
+  }
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('spotlight-modal');
+    if (modal && modal.classList.contains('open')) {
+      modal.style.display = 'none';
+      modal.classList.remove('open');
+      e.stopPropagation();
+    }
+  }
+});
+
+// ══════════════════════════════════════════
+//  RECRUITER MODE
+// ══════════════════════════════════════════
+
+window.toggleRecruiterMode = function() {
+  const desktop     = document.getElementById('desktop');
+  const menubar     = document.getElementById('menubar');
+  const recruiterV  = document.getElementById('recruiter-view');
+  const btn         = document.getElementById('recruiterModeBtn');
+  const spotlight   = document.getElementById('spotlight-modal');
+  if (!recruiterV) return;
+
+  const isRecruiter = recruiterV.style.display !== 'none';
+  if (isRecruiter) {
+    // Switch back to OS
+    recruiterV.style.display = 'none';
+    if (desktop)  desktop.style.display = '';
+    if (menubar)  menubar.style.display = '';
+    if (btn) btn.textContent = '⚡ Recruiter View';
+    localStorage.setItem('pn-recruiter', '0');
+  } else {
+    // Switch to recruiter view
+    if (spotlight) spotlight.style.display = 'none';
+    recruiterV.style.display = 'block';
+    if (desktop) desktop.style.display = 'none';
+    if (menubar) menubar.style.display = 'none';
+    if (btn) btn.textContent = '← Back to OS';
+    localStorage.setItem('pn-recruiter', '1');
+    recruiterV.scrollTop = 0;
+  }
+};
