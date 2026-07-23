@@ -1671,3 +1671,72 @@ body.light-theme .mob-back-btn { color: var(--blue); border-color: rgba(58,106,2
   .rv-skills-grid { grid-template-columns: 1fr; }
   .rv-contact { flex-direction: column; }
 }
+
+/* ══════════════════════════════════════════════════════
+   SKILL TAGS (replaces progress bars)
+══════════════════════════════════════════════════════ */
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.skill-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--tc, var(--text));
+  background: color-mix(in srgb, var(--tc, #7aa2f7) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tc, #7aa2f7) 30%, transparent);
+  transition: background 0.15s, transform 0.12s;
+  cursor: default;
+}
+.skill-tag:hover {
+  background: color-mix(in srgb, var(--tc, #7aa2f7) 22%, transparent);
+  transform: translateY(-1px);
+}
+
+/* Social icon button reset */
+button.social-icon-item {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ══════════════════════════════════════════════════════
+   TOAST NOTIFICATION
+══════════════════════════════════════════════════════ */
+
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--surface);
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 999999;
+  white-space: nowrap;
+}
+
+.toast.toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
