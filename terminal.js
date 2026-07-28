@@ -75,7 +75,7 @@
       '<span class="t-yellow">╚══════════════════════════════════════════════════╝</span>',
       '',
       '<span class="t-green">EDUCATION</span>',
-      '  B.Tech Computer Science Engineering  (2021–2025)',
+      '  B.Tech Computer Science Engineering  (2023–2027)',
       '',
       '<span class="t-green">PROJECTS</span>',
       '  • IndustrialBrain AI   — ET AI Hackathon 2026',
