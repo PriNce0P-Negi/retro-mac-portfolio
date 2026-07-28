@@ -71,7 +71,7 @@
 
     'cat resume.txt': function() { return [
       '<span class="t-yellow">╔══════════════════════════════════════════════════╗</span>',
-      '<span class="t-yellow">║</span>              <span class="t-blue">PRINCE NEGI  -  RESUME</span>              <span class="t-yellow">║</span>',
+      '<span class="t-yellow">║</span>              <span class="t-blue">PRINCE NEGI  -  RESUME</span>          <span class="t-yellow">║</span>',
       '<span class="t-yellow">╚══════════════════════════════════════════════════╝</span>',
       '',
       '<span class="t-green">EDUCATION</span>',
