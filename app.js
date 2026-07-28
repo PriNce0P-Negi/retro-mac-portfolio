@@ -444,8 +444,21 @@ const AudioSystem = (() => {
 
   function getCtx() {
     if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
     return ctx;
   }
+
+  // Global browser autoplay policy unlocker
+  const unlockAudio = () => {
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+  };
+  window.addEventListener('click', unlockAudio, { once: false });
+  window.addEventListener('keydown', unlockAudio, { once: false });
+  window.addEventListener('touchstart', unlockAudio, { once: false });
 
   function tone(freq, duration, type = 'sine', gain = 0.18, delay = 0) {
     if (muted) return;
@@ -500,14 +513,12 @@ window.closeWindow = function(id) {
   _origClose(id);
 };
 
-// Play boot chime after desktop reveals
-const _origReveal = revealDesktop;
-// revealDesktop is called at end of boot — patch boot sequence end
-const _origRunBoot = runBootSequence;
-// Instead: hook into init
-window.addEventListener('load', () => {
-  setTimeout(() => AudioSystem.playBoot(), 2000); // after ~2s boot
-}, { once: true });
+// Play boot chime when revealDesktop executes
+const _origRevealDesktop = revealDesktop;
+window.revealDesktop = function() {
+  _origRevealDesktop();
+  AudioSystem.playBoot();
+};
 
 // ══════════════════════════════════════════
 //  VIDEO WINDOW SYSTEM
