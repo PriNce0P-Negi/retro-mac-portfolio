@@ -814,6 +814,18 @@
       </div>
       <span class="dock-label">Social</span>
     </div>
+    <div class="dock-item" data-window="win-terminal" onclick="openWindow('win-terminal')" title="Terminal">
+      <div class="dock-icon-wrap">
+        <svg width="44" height="44" viewBox="0 0 44 44">
+          <rect x="4" y="4" width="36" height="36" rx="5" fill="#0d0e17" stroke="#9ece6a" stroke-width="1.2"/>
+          <text x="8" y="22" fill="#9ece6a" font-size="10" font-family="monospace">$</text>
+          <rect x="15" y="17" width="10" height="2" rx="1" fill="#9ece6a" opacity="0.8"/>
+          <rect x="8" y="26" width="18" height="2" rx="1" fill="#9ece6a" opacity="0.5"/>
+          <rect x="8" y="30" width="12" height="2" rx="1" fill="#9ece6a" opacity="0.3"/>
+        </svg>
+      </div>
+      <span class="dock-label">Terminal</span>
+    </div>
     <div class="dock-sep"></div>
     <div class="dock-item" data-window="win-snake" onclick="openWindow('win-snake')" title="Snake">
       <div class="dock-icon-wrap"><svg width="44" height="44" viewBox="0 0 44 44"><rect x="4" y="4" width="36" height="36" rx="5" fill="#0d0e17" stroke="#9ece6a" stroke-width="1.2"/><text x="22" y="28" text-anchor="middle" font-size="22">🐍</text></svg></div>
@@ -892,10 +904,10 @@
 <!-- Confetti canvas (full-screen, above everything) -->
 <canvas id="confetti-canvas" style="display:none;position:fixed;inset:0;z-index:999999;pointer-events:none;"></canvas>
 
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 <script src="snake.js"></script>
 <script src="minesweeper.js"></script>
-<script src="terminal.js?v=3"></script>
+<script src="terminal.js?v=4"></script>
 <script>
 function showResumeNotice() {
   document.getElementById('resumeModal').style.display = 'flex';
